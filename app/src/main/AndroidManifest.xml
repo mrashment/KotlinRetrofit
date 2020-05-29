@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TodosActivity"></activity>
-        <activity android:name=".AlbumsActivity" />
-        <activity android:name=".PostsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".views.TodosActivity"></activity>
+        <activity android:name=".views.AlbumsActivity" />
+        <activity android:name=".views.PostsActivity" />
+        <activity android:name=".views.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
