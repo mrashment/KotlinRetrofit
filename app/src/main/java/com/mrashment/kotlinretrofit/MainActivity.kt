@@ -16,9 +16,17 @@ class MainActivity : AppCompatActivity() {
         setupButtons()
     }
 
-    fun setupButtons() {
+    private fun setupButtons() {
         btnPosts.setOnClickListener {
-            var intent = Intent(this,PostsActivity::class.java)
+            val intent = Intent(this,PostsActivity::class.java)
+            startActivity(intent)
+        }
+        btnAlbums.setOnClickListener {
+            val intent = Intent(this,AlbumsActivity::class.java)
+            startActivity(intent)
+        }
+        btnTodos.setOnClickListener {
+            val intent = Intent(this,TodosActivity::class.java)
             startActivity(intent)
         }
     }
