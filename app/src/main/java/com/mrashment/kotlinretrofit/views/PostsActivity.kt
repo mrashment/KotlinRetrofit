@@ -3,6 +3,8 @@ package com.mrashment.kotlinretrofit.views
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mrashment.kotlinretrofit.R
 import com.mrashment.kotlinretrofit.adapters.PostAdapter
@@ -17,7 +19,10 @@ class PostsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts)
 
-        val recycler: RecyclerView = findViewById(R.id.recyclerView)
+        posts.add(Post(1,2,"a title","a body"))
+
+        val recycler= recyclerView
+        recycler.layoutManager = LinearLayoutManager(this,RecyclerView.VERTICAL,false)
         recycler.adapter = PostAdapter(posts)
 
 
