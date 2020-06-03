@@ -11,6 +11,7 @@ import com.mrashment.kotlinretrofit.R
 import com.mrashment.kotlinretrofit.adapters.PostAdapter
 import com.mrashment.kotlinretrofit.models.JsonPlaceholderApi
 import com.mrashment.kotlinretrofit.models.Post
+import com.mrashment.kotlinretrofit.repo.Repository
 import kotlinx.android.synthetic.main.activity_posts.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,15 +27,9 @@ class PostsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_posts)
 
-        //move this to a repo class
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        val jsonPlaceholderApi = retrofit.create(JsonPlaceholderApi::class.java)
 
-        val call = jsonPlaceholderApi.getAllPosts()
+        val call = Repository.getAllPosts()
         call.enqueue(object: Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Toast.makeText(this@PostsActivity,"Failed to retrieve data" + t.message,Toast.LENGTH_SHORT).show()

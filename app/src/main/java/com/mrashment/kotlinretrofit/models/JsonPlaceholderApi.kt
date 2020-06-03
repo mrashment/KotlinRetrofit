@@ -7,4 +7,7 @@ interface JsonPlaceholderApi {
 
     @GET("posts")
     fun getAllPosts(): Call<List<Post>>
+
+    @GET("users")
+    fun getAllUsers(): Call<List<User>>
 }
