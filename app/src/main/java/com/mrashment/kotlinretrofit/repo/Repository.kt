@@ -7,19 +7,17 @@ import kotlin.reflect.KProperty
 
 object Repository {
 
-    val retrofit by lazy {
-        val retrofit = Retrofit.Builder()
+    private val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
 
-    val service: JsonPlaceholderApi by lazy {
-        val jsonPlaceholderApi = (retrofit as Retrofit).create(JsonPlaceholderApi::class.java)
-    }
+    private val service: JsonPlaceholderApi = retrofit.create(JsonPlaceholderApi::class.java)
 
 
-    fun getAllPosts() = service
+    fun getAllPosts() = service.getAllPosts()
+
+    fun getAllUser() = service.getAllUsers()
 
 }
 
