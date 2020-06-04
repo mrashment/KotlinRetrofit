@@ -49,8 +49,8 @@ class PostsActivity : AppCompatActivity() {
 
          */
 
+        // Getting the posts to display
         val call = Repository.getAllPosts()
-
         call.enqueue(object: Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Toast.makeText(this@PostsActivity,"Failed to retrieve data" + t.message,Toast.LENGTH_SHORT).show()
