@@ -2,6 +2,8 @@ package com.mrashment.kotlinretrofit.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -49,8 +51,15 @@ class PostsActivity : AppCompatActivity() {
 
          */
 
+        sortAscending()
+
+        val recycler= recyclerView
+        recycler.layoutManager = LinearLayoutManager(this,RecyclerView.VERTICAL,false)
+    }
+
+    fun sortAscending() {
         // Getting the posts to display
-        val call = Repository.getAllPosts()
+        val call = Repository.getPosts(null,"userId","asc")
         call.enqueue(object: Callback<List<Post>> {
             override fun onFailure(call: Call<List<Post>>, t: Throwable) {
                 Toast.makeText(this@PostsActivity,"Failed to retrieve data" + t.message,Toast.LENGTH_SHORT).show()
@@ -62,17 +71,47 @@ class PostsActivity : AppCompatActivity() {
                     return
                 }
 
-                for (p in response.body()!!.iterator()) {
-                    posts.add(p)
-                }
+                posts.clear()
+                posts.addAll(response.body()!!)
                 recyclerView.adapter = PostAdapter(posts)
             }
 
         })
+    }
 
-        val recycler= recyclerView
-        recycler.layoutManager = LinearLayoutManager(this,RecyclerView.VERTICAL,false)
+    fun sortDescending() {
+        // Very strange descending order that may or may not be from the API itself 91 -> 100 -> 81 -> 90 etc
+        val call = Repository.getPosts(null,"userId","desc")
+        call.enqueue(object: Callback<List<Post>> {
+            override fun onFailure(call: Call<List<Post>>, t: Throwable) {
+                Toast.makeText(this@PostsActivity,"Failed to retrieve data" + t.message,Toast.LENGTH_SHORT).show()
+            }
 
+            override fun onResponse(call: Call<List<Post>>, response: Response<List<Post>>) {
+                if (!response.isSuccessful) {
+                    Toast.makeText(this@PostsActivity,"Failed to retrieve data: onResponse" + response.message(),Toast.LENGTH_SHORT).show()
+                    return
+                }
 
+                posts.clear()
+                posts.addAll(response.body()!!)
+                recyclerView.adapter = PostAdapter(posts)
+            }
+
+        })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_posts,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.optionSortAscending -> sortAscending()
+            R.id.optionSortDescending -> sortDescending()
+            else -> Toast.makeText(this@PostsActivity,"Options menu did something whacky", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 }

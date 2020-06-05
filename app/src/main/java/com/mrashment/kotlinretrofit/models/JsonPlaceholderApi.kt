@@ -13,9 +13,9 @@ interface JsonPlaceholderApi {
 
     @GET ("posts")
     fun getPosts(
-        @Query("userId")userId: Int,
-        @Query("_sort")sort: String,
-        @Query("_order")order: String
+        @Query("userId")userId: Int?,
+        @Query("_sort")sort: String?,
+        @Query("_order")order: String?
     ): Call<List<Post>>
 
     @GET("albums")
