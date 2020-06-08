@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mrashment.kotlinretrofit">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".views.TodosActivity"></activity>
+        <activity android:name=".views.PhotosInAlbumActivity"></activity>
+        <activity android:name=".views.TodosActivity" />
         <activity android:name=".views.AlbumsActivity" />
         <activity android:name=".views.PostsActivity" />
         <activity android:name=".views.MainActivity">

@@ -1,5 +1,6 @@
 package com.mrashment.kotlinretrofit.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -27,6 +28,11 @@ class AlbumsActivity : AppCompatActivity() {
         showAll()
     }
 
+    fun albumClicked(album: Album) {
+        val intent = Intent(this@AlbumsActivity, PhotosInAlbumActivity::class.java)
+        intent.putExtra("Album",album)
+        startActivity(intent)
+    }
 
     private fun showAll() {
         val call = Repository.getAllAlbums()
@@ -42,7 +48,7 @@ class AlbumsActivity : AppCompatActivity() {
                 }
                 albums.clear()
                 albums.addAll(response.body()!!)
-                recyclerView.adapter = AlbumAdapter(albums)
+                recyclerView.adapter = AlbumAdapter(albums) { album: Album -> albumClicked(album)}
             }
         })
     }

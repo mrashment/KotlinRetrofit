@@ -1,5 +1,7 @@
 package com.mrashment.kotlinretrofit.models
 
+import java.io.Serializable
+
 data class Post(
     val id: Int,
     val userId: Int,
@@ -45,7 +47,7 @@ data class Album(
     val userId: Int,
     val id: Int,
     val title: String
-)
+) : Serializable
 
 data class Photo(
     val albumId: Int,
