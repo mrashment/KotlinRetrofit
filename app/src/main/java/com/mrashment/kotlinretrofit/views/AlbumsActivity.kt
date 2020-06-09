@@ -30,7 +30,7 @@ class AlbumsActivity : AppCompatActivity() {
 
     fun albumClicked(album: Album) {
         val intent = Intent(this@AlbumsActivity, PhotosInAlbumActivity::class.java)
-        intent.putExtra("Album",album)
+        intent.putExtra("album",album)
         startActivity(intent)
     }
 

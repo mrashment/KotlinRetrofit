@@ -20,4 +20,9 @@ interface JsonPlaceholderApi {
 
     @GET("albums")
     fun getAllAlbums(): Call<List<Album>>
+
+    @GET("photos")
+    fun getPhotos(
+        @Query("albumId")albumId: Int?
+    ): Call<List<Photo>>
 }

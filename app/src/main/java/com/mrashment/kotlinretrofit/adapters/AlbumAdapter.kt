@@ -23,17 +23,13 @@ class AlbumAdapter(val albums: ArrayList<Album>, val albumClickListener: (Album)
         holder.bind(albums[position], albumClickListener)
     }
 
-    class AlbumHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class AlbumHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(album: Album, albumClickListener: (Album) -> Unit) = with(itemView) {
             tvId.text = album.id.toString()
             tvUserId.append(album.userId.toString())
             tvTitle.text = album.title
-            itemView.setOnClickListener { albumClickListener(album) }
-        }
-
-        override fun onClick(v: View?) {
-
+            setOnClickListener { albumClickListener(album) }
         }
     }
 }
