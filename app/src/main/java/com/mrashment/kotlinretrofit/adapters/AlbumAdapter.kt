@@ -27,7 +27,7 @@ class AlbumAdapter(val albums: ArrayList<Album>, val albumClickListener: (Album)
 
         fun bind(album: Album, albumClickListener: (Album) -> Unit) = with(itemView) {
             tvId.text = album.id.toString()
-            tvUserId.append(album.userId.toString())
+            tvUserId.text = "UserId: ${album.id}"
             tvTitle.text = album.title
             setOnClickListener { albumClickListener(album) }
         }

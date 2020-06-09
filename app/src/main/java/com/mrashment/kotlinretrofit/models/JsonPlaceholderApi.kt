@@ -2,6 +2,7 @@ package com.mrashment.kotlinretrofit.models
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface JsonPlaceholderApi {
@@ -21,8 +22,8 @@ interface JsonPlaceholderApi {
     @GET("albums")
     fun getAllAlbums(): Call<List<Album>>
 
-    @GET("photos")
+    @GET("albums/{albumId}/photos")
     fun getPhotos(
-        @Query("albumId")albumId: Int?
+        @Path("albumId")albumId: String?
     ): Call<List<Photo>>
 }

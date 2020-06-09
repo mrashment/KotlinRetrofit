@@ -23,7 +23,7 @@ object Repository {
 
     fun getAllUser() = service.getAllUsers()
 
-    fun getPhotos(albumId: Int?) = service.getPhotos(albumId)
+    fun getPhotos(albumId: String?) = service.getPhotos(albumId)
 
 }
 

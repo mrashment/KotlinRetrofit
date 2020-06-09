@@ -2,6 +2,7 @@ package com.mrashment.kotlinretrofit.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,20 +18,24 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PhotosInAlbumActivity : AppCompatActivity() {
+    val TAG: String = "PhotosInAlbumActivity"
 
-    private val album: Album = intent.getSerializableExtra("album") as Album
+    private lateinit var album: Album
     private val photos: ArrayList<Photo> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photos_in_album)
 
+        Log.d(TAG,"We in there")
+        album = intent.getSerializableExtra("album") as Album
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL,false)
         showPhotos()
     }
 
     fun showPhotos() {
-        val call = Repository.getPhotos(album.id)
+        Log.d(TAG, "showPhotos" + album.id)
+        val call = Repository.getPhotos(album.id.toString())
         call.enqueue(object: Callback<List<Photo>> {
             override fun onFailure(call: Call<List<Photo>>, t: Throwable) {
                 Toast.makeText(this@PhotosInAlbumActivity,"Failed to retrieve photos", Toast.LENGTH_SHORT).show()
@@ -42,8 +47,12 @@ class PhotosInAlbumActivity : AppCompatActivity() {
                     return
                 }
                 photos.addAll(response.body()!!)
-                recyclerView.adapter = PhotoAdapter(photos, {photo: Photo -> Unit})
+                recyclerView.adapter = PhotoAdapter(photos) { photo: Photo -> onThumbnailClicked(photo)}
             }
         })
+    }
+
+    fun onThumbnailClicked(photo: Photo) {
+
     }
 }
