@@ -21,9 +21,11 @@ object Repository {
 
     fun getPosts(userId: Int?, sort: String?, order: String?) = service.getPosts(userId,sort,order)
 
-    fun getAllUser() = service.getAllUsers()
+    fun getAllUsers() = service.getAllUsers()
 
     fun getPhotos(albumId: String?) = service.getPhotos(albumId)
+
+    fun getTodos(userId: Int?) = service.getTodos(userId)
 
 }
 
