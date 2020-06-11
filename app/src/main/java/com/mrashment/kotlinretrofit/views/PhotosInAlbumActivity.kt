@@ -1,8 +1,11 @@
 package com.mrashment.kotlinretrofit.views
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +15,7 @@ import com.mrashment.kotlinretrofit.adapters.PhotoAdapter
 import com.mrashment.kotlinretrofit.models.Album
 import com.mrashment.kotlinretrofit.models.Photo
 import com.mrashment.kotlinretrofit.repo.Repository
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_photos_in_album.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,6 +57,17 @@ class PhotosInAlbumActivity : AppCompatActivity() {
     }
 
     fun onThumbnailClicked(photo: Photo) {
+        ivFullImage.visibility = View.VISIBLE
+        Picasso.get()
+            .load(Uri.parse(photo.url))
+            .placeholder(R.mipmap.ic_launcher)
+            .into(ivFullImage)
+    }
 
+    override fun onBackPressed() {
+        with (ivFullImage) {
+            if (this.visibility == View.VISIBLE) this.visibility = View.GONE
+            else super.onBackPressed()
+        }
     }
 }
