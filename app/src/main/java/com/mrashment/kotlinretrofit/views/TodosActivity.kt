@@ -50,4 +50,23 @@ class TodosActivity : AppCompatActivity() {
             }
         })
     }
+
+    fun getTodos(userId: Int? = null) {
+        val call = Repository.getTodos(userId)
+        call.enqueue(object: Callback<List<Todo>> {
+            override fun onFailure(call: Call<List<Todo>>, t: Throwable) {
+                Toast.makeText(this@TodosActivity,"Failed to retrieve todos",Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<List<Todo>>, response: Response<List<Todo>>) {
+                if (!response.isSuccessful) {
+                    Toast.makeText(this@TodosActivity,"Failed to retrieve todos",Toast.LENGTH_SHORT).show()
+                    return
+                }
+                todos.clear()
+                todos.addAll(response.body()!!)
+
+            }
+        })
+    }
 }
