@@ -6,13 +6,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mrashment.kotlinretrofit.R
+import com.mrashment.kotlinretrofit.adapters.TodoAdapter
 import com.mrashment.kotlinretrofit.models.Todo
 import com.mrashment.kotlinretrofit.models.User
 import com.mrashment.kotlinretrofit.repo.Repository
 import kotlinx.android.synthetic.main.activity_albums.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,8 +19,9 @@ import kotlin.coroutines.CoroutineContext
 
 class TodosActivity : AppCompatActivity() {
 
+    val scope = CoroutineScope(Job() + Dispatchers.Main)
     val todos: ArrayList<Todo> = ArrayList()
-    val users: ArrayList<User> = ArrayList()
+    val users: MutableMap<Int, User> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,44 +29,39 @@ class TodosActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this@TodosActivity,RecyclerView.VERTICAL,false)
 
-        getUsers()
+        val job = scope.async {
+            getUsers()
+            getTodos()
+            recyclerView.adapter = TodoAdapter(users,todos)
+        }
     }
 
-    fun getUsers() {
-        val call = Repository.getAllUsers()
-        call.enqueue(object: Callback<List<User>> {
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+    suspend fun getUsers() {
+        withContext(Dispatchers.IO) {
+            val call = Repository.getAllUsers()
+            val response = call.execute()
+            if (!response.isSuccessful) {
                 Toast.makeText(this@TodosActivity,"Failed to retrieve users",Toast.LENGTH_SHORT).show()
+                return@withContext
             }
 
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                if (!response.isSuccessful) {
-                    Toast.makeText(this@TodosActivity,"Failed to retrieve users",Toast.LENGTH_SHORT).show()
-                    return
-                }
-                users.clear()
-                users.addAll(response.body()!!)
-
+            for (user in response.body()!!) {
+                users[user.id] = user
             }
-        })
+        }
     }
 
-    fun getTodos(userId: Int? = null) {
-        val call = Repository.getTodos(userId)
-        call.enqueue(object: Callback<List<Todo>> {
-            override fun onFailure(call: Call<List<Todo>>, t: Throwable) {
-                Toast.makeText(this@TodosActivity,"Failed to retrieve todos",Toast.LENGTH_SHORT).show()
+    suspend fun getTodos(userId: Int? = null) {
+        withContext(Dispatchers.IO) {
+            val call = Repository.getTodos(userId)
+            val response = call.execute()
+            if (!response.isSuccessful) {
+                Toast.makeText(this@TodosActivity, "Failed to retrieve todos", Toast.LENGTH_SHORT)
+                    .show()
+                return@withContext
             }
-
-            override fun onResponse(call: Call<List<Todo>>, response: Response<List<Todo>>) {
-                if (!response.isSuccessful) {
-                    Toast.makeText(this@TodosActivity,"Failed to retrieve todos",Toast.LENGTH_SHORT).show()
-                    return
-                }
-                todos.clear()
-                todos.addAll(response.body()!!)
-
-            }
-        })
+            todos.clear()
+            todos.addAll(response.body()!!)
+        }
     }
 }
