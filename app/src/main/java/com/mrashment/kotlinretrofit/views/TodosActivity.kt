@@ -2,6 +2,7 @@ package com.mrashment.kotlinretrofit.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class TodosActivity : AppCompatActivity() {
 
     suspend fun getUsers() = withContext(Dispatchers.IO) {
         val call = Repository.getAllUsers()
+        Log.d("Todos","Started getUsers()")
         val response = call.execute()
         if (!response.isSuccessful) {
             Toast.makeText(this@TodosActivity,"Failed to retrieve users",Toast.LENGTH_SHORT).show()
@@ -49,10 +51,12 @@ class TodosActivity : AppCompatActivity() {
         for (user in response.body()!!) {
             users[user.id] = user
         }
+        Log.d("Todos","Completed getUsers()")
     }
 
     suspend fun getTodos(userId: Int? = null) = withContext(Dispatchers.IO) {
         val call = Repository.getTodos(userId)
+        Log.d("Todos","Started getTodos()")
         val response = call.execute()
         if (!response.isSuccessful) {
             Toast.makeText(this@TodosActivity, "Failed to retrieve todos", Toast.LENGTH_SHORT)
@@ -61,6 +65,7 @@ class TodosActivity : AppCompatActivity() {
         }
         todos.clear()
         todos.addAll(response.body()!!)
+        Log.d("Todos","Completed getTodos()")
     }
 
 }
