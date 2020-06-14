@@ -29,39 +29,38 @@ class TodosActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this@TodosActivity,RecyclerView.VERTICAL,false)
 
-        val job = scope.async {
-            getUsers()
-            getTodos()
+        scope.launch {
+            val job1 = async { getUsers() }
+            val job2 = async { getTodos() }
+            job1.await()
+            job2.await()
             recyclerView.adapter = TodoAdapter(users,todos)
         }
     }
 
-    suspend fun getUsers() {
-        withContext(Dispatchers.IO) {
-            val call = Repository.getAllUsers()
-            val response = call.execute()
-            if (!response.isSuccessful) {
-                Toast.makeText(this@TodosActivity,"Failed to retrieve users",Toast.LENGTH_SHORT).show()
-                return@withContext
-            }
+    suspend fun getUsers() = withContext(Dispatchers.IO) {
+        val call = Repository.getAllUsers()
+        val response = call.execute()
+        if (!response.isSuccessful) {
+            Toast.makeText(this@TodosActivity,"Failed to retrieve users",Toast.LENGTH_SHORT).show()
+            return@withContext
+        }
 
-            for (user in response.body()!!) {
-                users[user.id] = user
-            }
+        for (user in response.body()!!) {
+            users[user.id] = user
         }
     }
 
-    suspend fun getTodos(userId: Int? = null) {
-        withContext(Dispatchers.IO) {
-            val call = Repository.getTodos(userId)
-            val response = call.execute()
-            if (!response.isSuccessful) {
-                Toast.makeText(this@TodosActivity, "Failed to retrieve todos", Toast.LENGTH_SHORT)
-                    .show()
-                return@withContext
-            }
-            todos.clear()
-            todos.addAll(response.body()!!)
+    suspend fun getTodos(userId: Int? = null) = withContext(Dispatchers.IO) {
+        val call = Repository.getTodos(userId)
+        val response = call.execute()
+        if (!response.isSuccessful) {
+            Toast.makeText(this@TodosActivity, "Failed to retrieve todos", Toast.LENGTH_SHORT)
+                .show()
+            return@withContext
         }
+        todos.clear()
+        todos.addAll(response.body()!!)
     }
+
 }
