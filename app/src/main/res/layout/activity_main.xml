@@ -28,5 +28,18 @@
         android:text="Todos"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPostPost"
+        android:text="Post a Post"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUserToPost"
+        android:textAlignment="center"
+        android:text="User Id: 5\nId: 4\nTitle: A Great Title\nBody: This is the body my dude"
+        />
+
 
 </LinearLayout>

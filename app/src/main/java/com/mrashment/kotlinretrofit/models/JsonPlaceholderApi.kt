@@ -1,9 +1,7 @@
 package com.mrashment.kotlinretrofit.models
 
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface JsonPlaceholderApi {
     @GET("users")
@@ -31,4 +29,7 @@ interface JsonPlaceholderApi {
     fun getTodos(
         @Query("userId")userId: Int?
     ): Call<List<Todo>>
+
+    @POST("posts")
+    fun postPost(@Body post: Post): Call<Post> //lol
 }
